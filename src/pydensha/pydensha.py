@@ -8,6 +8,8 @@ class PyDensha:
         self.assign_led(led_pins)
 
     def assign_led(self, led_pins):
+        self._close_led()
+
         try:
             self._led = RGBLED(
                 red=led_pins['red'],
@@ -15,4 +17,10 @@ class PyDensha:
                 blue=led_pins['blue']
             )
         except TypeError:
+            pass
+
+    def _close_led(self):
+        try:
+            self._led.close()
+        except AttributeError:
             pass
