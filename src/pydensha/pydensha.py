@@ -12,11 +12,11 @@ class PyDensha:
 
         try:
             self._led = RGBLED(
-                red=led_pins['red'],
-                green=led_pins['green'],
-                blue=led_pins['blue']
+                red=led_pins.get('red'),
+                green=led_pins.get('green'),
+                blue=led_pins.get('blue')
             )
-        except TypeError:
+        except AttributeError:
             pass
 
     def _close_led(self):
