@@ -1,6 +1,6 @@
+from colorzero import Color
 from gpiozero import RGBLED
 from gpiozero.exc import PinInvalidPin
-from colorzero import Color
 
 
 def _exc_attr_err(func):
