@@ -4,6 +4,14 @@ from colorzero import Color
 
 def test_assign_led(pydensha, led_pins):
     assert pydensha._led is None
+    pydensha.assign_led(
+        {
+            'red': '',
+            'green': '',
+            'blue': ''
+        }
+    )
+    assert pydensha._led is None
     pydensha.assign_led(led_pins)
     assert pydensha._led is not None
 

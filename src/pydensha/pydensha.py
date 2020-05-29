@@ -1,5 +1,6 @@
-from gpiozero import RGBLED
 from colorzero import Color
+from gpiozero import RGBLED
+from gpiozero.exc import PinInvalidPin
 
 
 def _exc_attr_err(func):
@@ -21,11 +22,14 @@ class PyDensha:
     def assign_led(self, led_pins):
         self._close_led()
 
-        self._led = RGBLED(
-            red=led_pins.get('red'),
-            green=led_pins.get('green'),
-            blue=led_pins.get('blue')
-        )
+        try:
+            self._led = RGBLED(
+                red=led_pins.get('red'),
+                green=led_pins.get('green'),
+                blue=led_pins.get('blue')
+            )
+        except PinInvalidPin:
+            pass
 
     @_exc_attr_err
     def _close_led(self):
