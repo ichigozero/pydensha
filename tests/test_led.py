@@ -60,3 +60,18 @@ def test_blink_led_with_red_color(mocker, pydensha_init, train_infos):
     spy = mocker.spy(pydensha_init._led, 'blink')
     pydensha_init.operate_led(train_infos)
     spy.assert_called_once_with(1, 1, on_color=Color('red'))
+
+
+@pytest.mark.parametrize(
+    'train_infos', [
+        ['平常運転', None],
+        [None, None],
+        pytest.param(['平常運転', '遅延'], marks=pytest.mark.xfail),
+    ]
+)
+def test_led_unchanging_state(mocker, pydensha_init, train_infos):
+    spy_blink = mocker.spy(pydensha_init._led, 'blink')
+    pydensha_init.operate_led(train_infos)
+
+    assert pydensha_init._led.color != Color('green')
+    assert spy_blink.call_count == 0
