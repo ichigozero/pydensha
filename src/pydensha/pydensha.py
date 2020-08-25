@@ -3,10 +3,10 @@ from gpiozero import RGBLED
 from gpiozero.exc import PinInvalidPin
 
 
-def _exc_attr_err(func):
+def _ignore_exception(function):
     def wrapper(*args, **kwargs):
         try:
-            func(*args, **kwargs)
+            function(*args, **kwargs)
         except AttributeError:
             pass
     return wrapper
@@ -18,7 +18,7 @@ class PyDensha:
 
         self.assign_led(led_pins)
 
-    @_exc_attr_err
+    @_ignore_exception
     def assign_led(self, led_pins):
         self._close_led()
 
@@ -31,13 +31,12 @@ class PyDensha:
         except PinInvalidPin:
             pass
 
-    @_exc_attr_err
+    @_ignore_exception
     def _close_led(self):
         self._led.close()
 
-    @_exc_attr_err
-    def operate_led(self, train_infos,
-                    on_time=1, off_time=1):
+    @_ignore_exception
+    def operate_led(self, train_infos, on_time=1, off_time=1):
         if None not in train_infos:
             if all(train_info == '平常運転' for train_info in train_infos):
                 self._led.color = Color('green')
