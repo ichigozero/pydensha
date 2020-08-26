@@ -5,17 +5,18 @@ from colorzero import Color
 def test_assign_led(pydensha, led_pins):
     assert pydensha._led is None
 
-    pydensha.assign_led(
-        {
-            'red': '',
-            'green': '',
-            'blue': ''
-        }
-    )
+    pydensha.assign_led(led_pins)
+
+    assert pydensha._led is not None
+
+
+def test_assign_led_with_invalid_pins(pydensha):
     assert pydensha._led is None
 
-    pydensha.assign_led(led_pins)
-    assert pydensha._led is not None
+    invalid_pins = {'red': '', 'green': '', 'blue': ''}
+    pydensha.assign_led(invalid_pins)
+
+    assert pydensha._led is None
 
 
 def test_close_led_before_reassignment(mocker, pydensha_init, led_pins):
@@ -61,6 +62,7 @@ def test_blink_led_with_yellow_color(mocker, pydensha_init, train_infos):
     'train_infos', [
         ['その他', '運転計画'],
         ['その他', '平常運転'],
+        ['その他', '遅延'],
         pytest.param(['遅延', '平常運転'], marks=pytest.mark.xfail),
         pytest.param(['平常運転', '平常運転'], marks=pytest.mark.xfail),
     ]
@@ -83,7 +85,7 @@ def test_blink_led_with_red_color(mocker, pydensha_init, train_infos):
         pytest.param(['平常運転', '遅延'], marks=pytest.mark.xfail),
     ]
 )
-def test_led_unchanging_state(mocker, pydensha_init, train_infos):
+def test_unchanging_led_state(mocker, pydensha_init, train_infos):
     spy_blink = mocker.spy(pydensha_init._led, 'blink')
     pydensha_init.operate_led(train_infos)
 
